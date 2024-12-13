@@ -1,5 +1,5 @@
 EXE = EXE
-OBJS = CaseConverter.o main.o
+OBJS = CaseConverter.o sample.o
 
 FC = ifort
 FLAGS = -warn all -O0 -traceback -check all
