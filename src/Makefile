@@ -15,7 +15,7 @@ ${EXE} : ${OBJS}
 .PHONY : clean run re
 
 clean :
-	rm *.o *.mod ${EXE}
+	rm -fv *.o *.mod ${EXE}
 
 run :
 	./${EXE}

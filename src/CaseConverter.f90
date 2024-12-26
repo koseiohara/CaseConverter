@@ -8,68 +8,67 @@ module CaseConverter
     contains
 
 
-    subroutine to_upper(lower, upper)
-        character(*), intent(in)  :: lower
-        character(*), intent(out) :: upper
-
-        integer, parameter :: code_min = iachar('a')
-        integer, parameter :: code_max = iachar('z')
-        integer, parameter :: offset = iachar('A') - iachar('a')
-
-        integer :: lower_len
-        integer :: i
-
-        lower_len = len(trim(lower))
-
-        if (lower_len > len(upper)) then
-            write(0,'(A)') '<ERROR STOP>'
-            write(0,'(A)') 'to_upper()'
-            write(0,'(A)') 'Input string is longer than the output'
-            ERROR STOP
-        endif
-
-        upper = ''
-        do i = 1, lower_len
-            if (iachar(lower(i:i)) >= code_min .AND. iachar(lower(i:i)) <= code_max) then
-                upper(i:i) = achar(iachar(lower(i:i)) + offset)
-            else
-                upper(i:i) = lower(i:i)
-            endif
-        enddo
-
-    end subroutine to_upper
-
-
-    subroutine to_lower(upper, lower)
-        character(*), intent(in)  :: upper
-        character(*), intent(out) :: lower
+    subroutine to_upper(input, output)
+        character(*), intent(in)  :: input
+        character(*), intent(out) :: output
 
         integer, parameter :: code_min = iachar('A')
         integer, parameter :: code_max = iachar('Z')
         integer, parameter :: offset = iachar('a') - iachar('A')
 
-        integer :: upper_len
+        call convert_core(input   , &  !! IN
+                        & output  , &  !! OUT
+                        & offset  , &  !! IN
+                        & code_min, &  !! IN
+                        & code_max  )  !! IN
+       
+    end subroutine to_upper
+
+
+    subroutine to_lower(input, output)
+        character(*), intent(in)  :: input
+        character(*), intent(out) :: output
+
+        integer, parameter :: code_min = iachar('a')
+        integer, parameter :: code_max = iachar('z')
+        integer, parameter :: offset = iachar('A') - iachar('a')
+
+        call convert_core(input   , &  !! IN
+                        & output  , &  !! OUT
+                        & offset  , &  !! IN
+                        & code_min, &  !! IN
+                        & code_max  )  !! IN
+       
+    end subroutine to_lower
+
+
+    subroutine convert_core(input, output, offset, code_min, code_max)
+        character(*), intent(in)  :: input
+        character(*), intent(out) :: output
+        integer     , intent(in)  :: offset
+        integer     , intent(in)  :: code_min
+        integer     , intent(in)  :: code_max
+
+        integer :: input_len
         integer :: i
 
-        upper_len = len(trim(upper))
-
-        if (upper_len > len(lower)) then
+        input_len = len(trim(input))
+        if (input_len > len(output)) then
             write(0,'(A)') '<ERROR STOP>'
-            write(0,'(A)') 'to_lower()'
             write(0,'(A)') 'Input string is longer than the output'
             ERROR STOP
         endif
 
-        lower = ''
-        do i = 1, len(trim(upper))
-            if (iachar(upper(i:i)) >= code_min .AND. iachar(upper(i:i)) <= code_max) then
-                lower(i:i) = achar(iachar(upper(i:i)) + offset)
+        output = ''
+        do i = 1, input_len
+            if (iachar(input(i:i)) >= code_min .AND. iachar(input(i:i)) <= code_max) then
+                output(i:i) = achar(iachar(input(i:i)) + offset)
             else
-                lower(i:i) = upper(i:i)
+                output(i:i) = input(i:i)
             endif
         enddo
 
-    end subroutine to_lower
+    end subroutine convert_core
 
 
 end module CaseConverter
